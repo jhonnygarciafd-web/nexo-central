@@ -1,0 +1,13 @@
+{
+  "name": "nexo-central",
+  "version": "1.1.0",
+  "private": true,
+  "description": "NEXO — Sua inteligência central. Assistente pessoal de IA modular.",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^2.8.2",
+    "@types/node": "^26.5.0"
+  }
+}
