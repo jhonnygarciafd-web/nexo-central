@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <title>NEXO — Sua inteligência central</title>
+  <meta name="description" content="NEXO, a inteligência central pessoal de Jhonny." />
+
+  <meta name="theme-color" content="#05070d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NEXO" />
+  <link rel="apple-touch-icon" href="/icons/icon-180.png" />
+  <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app" id="app">
+
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-text">
+          <span class="brand-name">NEXO</span>
+          <span class="brand-tag">Sua inteligência central</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item is-active" data-view="core">
+          <span class="nav-dot"></span>NEXO CORE
+        </button>
+        <button class="nav-item" data-view="conversas">
+          <span class="nav-dot"></span>Conversas
+        </button>
+        <button class="nav-item" data-view="memoria">
+          <span class="nav-dot"></span>Memória
+        </button>
+        <button class="nav-item" data-view="ferramentas">
+          <span class="nav-dot"></span>Ferramentas
+        </button>
+        <button class="nav-item" data-view="integracoes">
+          <span class="nav-dot"></span>Integrações
+        </button>
+        <button class="nav-item" data-view="configuracoes">
+          <span class="nav-dot"></span>Configurações
+        </button>
+      </nav>
+
+      <div class="status-panel" id="statusPanel">
+        <div class="status-row">
+          <span class="status-led" id="statusLed"></span>
+          <span>NEXO CORE</span>
+          <span class="status-value" id="statusOnline">Online</span>
+        </div>
+        <div class="status-row muted">
+          <span>Motor de IA</span>
+          <span class="status-value" id="statusEngine">Gemini</span>
+        </div>
+        <div class="status-row muted">
+          <span>Memória</span>
+          <span class="status-value">Local</span>
+        </div>
+        <div class="status-row muted">
+          <span>Versão</span>
+          <span class="status-value">1.1</span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim"></div>
+
+    <main class="main">
+
+      <!-- NEXO CORE -->
+      <section class="view is-active" id="view-core">
+        <div class="core">
+          <div class="core-visual" id="coreVisual" aria-hidden="true">
+            <div class="core-ring r1"></div>
+            <div class="core-ring r2"></div>
+            <div class="core-ring r3"></div>
+            <div class="core-glow"></div>
+          </div>
+
+          <div class="core-heading">
+            <h1>NEXO</h1>
+            <p>Sua inteligência central</p>
+          </div>
+
+          <div class="chat" id="chat">
+            <div class="chat-log" id="chatLog">
+              <div class="msg msg-nexo">
+                <div class="msg-bubble">Olá. O que vamos fazer?</div>
+              </div>
+            </div>
+
+            <form class="chat-input" id="chatForm">
+              <textarea
+                id="chatInput"
+                rows="1"
+                placeholder="Fale com o NEXO..."
+                autocomplete="off"
+              ></textarea>
+              <button type="submit" id="chatSend" aria-label="Enviar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 12L20 4L13 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </form>
+            <p class="chat-hint">Enter envia · Shift+Enter quebra linha</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONVERSAS -->
+      <section class="view" id="view-conversas">
+        <header class="view-header">
+          <h2>Conversas</h2>
+          <p>Histórico salvo localmente neste dispositivo.</p>
+        </header>
+        <div class="panel">
+          <div class="panel-row">
+            <span>Conversa atual</span>
+            <button class="btn-ghost" id="btnClearConversation">Limpar histórico</button>
+          </div>
+          <p class="panel-note">
+            Em versões futuras, o histórico será sincronizado com um banco de dados
+            e ficará disponível em qualquer dispositivo.
+          </p>
+        </div>
+      </section>
+
+      <!-- MEMÓRIA -->
+      <section class="view" id="view-memoria">
+        <header class="view-header">
+          <h2>Memória</h2>
+          <p>Área preparada para memória persistente do NEXO.</p>
+        </header>
+        <div class="panel">
+          <div class="panel-row"><span>Armazenamento atual</span><span class="tag">Local (navegador)</span></div>
+          <div class="panel-row"><span>Armazenamento futuro</span><span class="tag tag-muted">Banco de dados</span></div>
+          <p class="panel-note">
+            A camada de memória foi projetada para ser substituída por um banco de
+            dados persistente sem alterar a forma como o NEXO Core acessa o contexto.
+          </p>
+        </div>
+      </section>
+
+      <!-- FERRAMENTAS -->
+      <section class="view" id="view-ferramentas">
+        <header class="view-header">
+          <h2>Ferramentas</h2>
+          <p>Área preparada para ações e ferramentas do NEXO.</p>
+        </header>
+        <div class="panel">
+          <p class="panel-note">Nenhuma ferramenta ativa ainda. Estrutura pronta para expansão.</p>
+        </div>
+      </section>
+
+      <!-- INTEGRAÇÕES -->
+      <section class="view" id="view-integracoes">
+        <header class="view-header">
+          <h2>Integrações</h2>
+          <p>Serviços que futuramente se conectarão ao NEXO.</p>
+        </header>
+        <div class="panel integrations-grid">
+          <div class="integration-card"><span>OpenAI</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>Claude</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>Gmail</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>Google Calendar</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>Google Drive</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>WhatsApp</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>CRM</span><span class="tag tag-muted">Planejado</span></div>
+          <div class="integration-card"><span>Automações</span><span class="tag tag-muted">Planejado</span></div>
+        </div>
+      </section>
+
+      <!-- CONFIGURAÇÕES -->
+      <section class="view" id="view-configuracoes">
+        <header class="view-header">
+          <h2>Configurações</h2>
+          <p>Configurações do NEXO.</p>
+        </header>
+        <div class="panel">
+          <div class="panel-row"><span>Motor de IA ativo</span><span class="tag" id="settingsEngine">Gemini</span></div>
+          <div class="panel-row"><span>Status do motor</span><span class="tag" id="settingsEngineStatus">Verificando…</span></div>
+          <div class="panel-row"><span>Versão do NEXO</span><span class="tag">1.1</span></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
