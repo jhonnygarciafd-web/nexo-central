@@ -1,12 +1,27 @@
 import type { AIProvider, ChatMessage, ProviderReply } from "./types.js";
 
 const GEMINI_MODEL = "gemini-2.0-flash";
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com";
 const REQUEST_TIMEOUT_MS = 20000;
 
 /**
  * Provedor Gemini (Google). Implementação server-side apenas — a chave
  * de API NUNCA trafega para o navegador do usuário.
+ *
+ * Compatível com dois cenários, sem nenhuma mudança de código:
+ *
+ * 1. Netlify AI Gateway (padrão de fábrica): a Netlify injeta
+ *    automaticamente GEMINI_API_KEY (um token de gateway) e
+ *    GOOGLE_GEMINI_BASE_URL nas Functions, cobrando o uso pelos créditos
+ *    da conta Netlify. É por isso que o NEXO já responde mesmo sem o
+ *    usuário configurar nada.
+ * 2. Chave Gemini própria do usuário: ao definir GEMINI_API_KEY no
+ *    projeto Netlify, a Netlify NUNCA sobrescreve essa variável, e
+ *    GOOGLE_GEMINI_BASE_URL deixa de existir — o provider então fala
+ *    direto com a API pública do Google.
+ *
+ * Em ambos os casos a autenticação usa o header `x-goog-api-key`, aceito
+ * tanto pelo AI Gateway da Netlify quanto pela API pública do Gemini.
  */
 export class GeminiProvider implements AIProvider {
   readonly id = "gemini";
@@ -15,6 +30,10 @@ export class GeminiProvider implements AIProvider {
   private getApiKey(): string | undefined {
     // Regra do NEXO: segredos somente via variável de ambiente server-side.
     return Netlify.env.get("GEMINI_API_KEY");
+  }
+
+  private getBaseUrl(): string {
+    return Netlify.env.get("GOOGLE_GEMINI_BASE_URL") || DEFAULT_BASE_URL;
   }
 
   isConfigured(): boolean {
@@ -47,11 +66,16 @@ export class GeminiProvider implements AIProvider {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
+    const endpoint = `${this.getBaseUrl()}/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
     let response: Response;
     try {
-      response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+      response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
         body: JSON.stringify(body),
         signal: controller.signal,
       });
