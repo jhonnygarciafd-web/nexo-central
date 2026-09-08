@@ -96,18 +96,38 @@ Configuração de build no Netlify:
 - **Publish directory:** `public`
 - **Functions directory:** `netlify/functions`
 
-## Variáveis de ambiente
+## Variáveis de ambiente e o Netlify AI Gateway
 
-| Variável          | Onde configurar                          | Obrigatória |
-|-------------------|-------------------------------------------|-------------|
-| `GEMINI_API_KEY`  | Netlify → Site settings → Environment variables (marcar como **Secret**) | Sim, para o motor Gemini responder |
+O NEXO **já responde em produção sem nenhuma configuração adicional**. Isso
+acontece porque a Netlify injeta automaticamente, em todo projeto com pelo
+menos um deploy de produção, as variáveis `GEMINI_API_KEY` e
+`GOOGLE_GEMINI_BASE_URL` apontando para o
+[AI Gateway](https://docs.netlify.com/build/ai-gateway/overview/) da
+própria Netlify — um proxy que fala com o Gemini de verdade e cobra o uso
+pelos créditos da conta Netlify (o plano Free já inclui uma cota).
 
-Se `GEMINI_API_KEY` não estiver configurada, o NEXO continua funcionando
-normalmente e o endpoint `/api/nexo-chat` responde com:
+| Variável                | Injetada automaticamente? | Onde configurar (opcional) |
+|--------------------------|----------------------------|------------------------------|
+| `GEMINI_API_KEY`         | Sim, pela Netlify AI Gateway | Netlify → Site settings → Environment variables (marcar como **Secret**) |
+| `GOOGLE_GEMINI_BASE_URL` | Sim, pela Netlify AI Gateway | Normalmente não precisa mexer |
+
+Se `GEMINI_API_KEY` e `GOOGLE_GEMINI_BASE_URL` não existirem por algum
+motivo (AI Gateway desativado na conta, por exemplo), o endpoint
+`/api/nexo-chat` não quebra — ele responde com:
 
 ```json
 { "status": "awaiting_configuration", "message": "Motor de IA aguardando configuração." }
 ```
+
+### Usando sua própria chave Gemini (em vez do AI Gateway)
+
+Para usar uma chave Gemini própria (obtida em
+[aistudio.google.com](https://aistudio.google.com/apikey)) em vez do AI
+Gateway, basta definir manualmente `GEMINI_API_KEY` em **Netlify → Site
+settings → Environment variables**, marcada como **Secret**. A Netlify
+nunca sobrescreve uma variável já definida por você, então a partir desse
+momento o NEXO passa a falar diretamente com a API pública do Google.
+Nenhuma mudança de código é necessária.
 
 A chave **nunca** deve ser colocada no HTML, no JavaScript do navegador ou
 commitada no repositório — ela existe apenas como variável de ambiente
