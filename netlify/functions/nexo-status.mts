@@ -6,6 +6,13 @@ import { getProvider } from "./lib/providers/index.js";
 export default async (_req: Request, _context: Context) => {
   const provider = getProvider("gemini");
 
+  // DIAGNÓSTICO TEMPORÁRIO — não expõe a chave, apenas metadados para
+  // depurar por que uma variável está sendo detectada. Remover depois.
+  const raw = Netlify.env.get("GEMINI_API_KEY");
+  console.log(
+    `nexo-status debug: typeof=${typeof raw} length=${raw ? raw.length : 0} prefix=${raw ? JSON.stringify(raw.slice(0, 4)) : "n/a"}`,
+  );
+
   return new Response(
     JSON.stringify({
       version: "1.1",
