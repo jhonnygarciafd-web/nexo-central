@@ -89,6 +89,10 @@ export class GeminiProvider implements AIProvider {
     }
 
     if (!response.ok) {
+      // DIAGNÓSTICO TEMPORÁRIO — loga só no servidor (Netlify), nunca ao
+      // usuário. Não inclui a chave. Remover depois de depurar.
+      const errText = await response.text().catch(() => "");
+      console.error(`nexo-chat gemini upstream body (truncated): ${errText.slice(0, 500)} | endpoint=${endpoint}`);
       // Nunca repassar corpo/erro cru da API upstream para o usuário final.
       throw new Error(`PROVIDER_UPSTREAM_ERROR_${response.status}`);
     }
